@@ -1,0 +1,23 @@
+thapar-virtual-labs/
+├── config/
+│   ├── db.js
+│   └── config.js
+├── middleware/
+│   ├── auth.js
+│   └── error.js
+├── models/
+│   ├── User.js
+│   ├── Department.js
+│   ├── Course.js
+│   └── Experiment.js
+├── routes/
+│   ├── auth.js
+│   ├── department.js
+│   ├── course.js
+│   └── experiment.js
+├── utils/
+│   ├── errorHandler.js
+│   ├── sendEmail.js
+│   └── jwtToken.js
+├── package.json
+└── server.js 
