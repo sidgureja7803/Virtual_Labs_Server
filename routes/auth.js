@@ -9,47 +9,47 @@ const crypto = require('crypto');
 const { validateThaparEmail } = require('../utils/validator');
 
 // Register user
-router.post('/register', async (req, res, next) => {
-    try {
-        const { name, email, password, role } = req.body;
+// router.post('/signup', async (req, res, next) => {
+//     try {
+//         const { name, email, password, role } = req.body;
 
-        // Validate Thapar email
-        if (!validateThaparEmail(email)) {
-            return next(new ErrorHandler('Please use your Thapar Institute email address', 400));
-        }
+//         // Validate Thapar email
+//         if (!validateThaparEmail(email)) {
+//             return next(new ErrorHandler('Please use your Thapar Institute email address', 400));
+//         }
 
-        // Check if user already exists
-        let user = await User.findOne({ email });
-        if (user) {
-            return next(new ErrorHandler('Email already registered', 400));
-        }
+//         // Check if user already exists
+//         let user = await User.findOne({ email });
+//         if (user) {
+//             return next(new ErrorHandler('Email already registered', 400));
+//         }
 
-        const user = await User.create({
-            name,
-            email,
-            password,
-            role
-        });
+//         user = await User.create({
+//             name,
+//             email,
+//             password,
+//             role
+//         });
 
-        // Generate OTP
-        const otp = user.generateVerificationOTP();
-        await user.save();
+//         // Generate OTP
+//         const otp = user.generateVerificationOTP();
+//         await user.save();
 
-        // Send verification email
-        await sendEmail({
-            email: user.email,
-            subject: 'Email Verification - Thapar Virtual Labs',
-            message: `Your verification OTP is: ${otp}\nThis OTP is valid for 10 minutes.`
-        });
+//         // Send verification email
+//         await sendEmail({
+//             email: user.email,
+//             subject: 'Email Verification - Thapar Virtual Labs',
+//             message: `Your verification OTP is: ${otp}\nThis OTP is valid for 10 minutes.`
+//         });
 
-        res.status(201).json({
-            success: true,
-            message: 'Registration successful. Please check your email for verification OTP.'
-        });
-    } catch (error) {
-        next(error);
-    }
-});
+//         res.status(201).json({
+//             success: true,
+//             message: 'Registration successful. Please check your email for verification OTP.'
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 // Verify email with OTP
 router.post('/verify-email', async (req, res, next) => {
@@ -120,7 +120,7 @@ router.post('/resend-otp', async (req, res, next) => {
         next(error);
     }
 });
-
+// 
 // Login user
 router.post('/login', async (req, res, next) => {
     try {
@@ -195,6 +195,51 @@ router.post('/password/forgot', async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: `Email sent to: ${user.email}`
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
+// Signup user
+router.post('/signup', async (req, res, next) => {
+    try {
+        const { name, email, password, role, department } = req.body;
+
+        // Validate Thapar email
+        if (!validateThaparEmail(email)) {
+            return next(new ErrorHandler('Please use your Thapar Institute email address', 400));
+        }
+
+        // Check if user already exists
+        let user = await User.findOne({ email });
+        if (user) {
+            return next(new ErrorHandler('Email already registered', 400));
+        }
+
+        // Create new user
+        user = await User.create({
+            name,
+            email,
+            password,
+            role,
+            department // Added department field
+        });
+
+        // Generate OTP
+        const otp = user.generateVerificationOTP();
+        await user.save();
+
+        // Send verification email
+        await sendEmail({
+            email: user.email,
+            subject: 'Email Verification - Thapar Virtual Labs',
+            message: `Your verification OTP is: ${otp}\nThis OTP is valid for 10 minutes.`
+        });
+
+        res.status(201).json({
+            success: true,
+            message: 'Signup successful. Please check your email for verification OTP.'
         });
     } catch (error) {
         next(error);

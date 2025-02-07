@@ -23,8 +23,13 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['student', 'teacher'],
+        enum: ['admin', 'courseCoordinator', 'labInstructor', 'student'],
         default: 'student'
+    },
+    department: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Department',
+        required: true
     },
     isEmailVerified: {
         type: Boolean,
@@ -39,7 +44,34 @@ const userSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    coordinatedCourses: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Course'
+    }],
+    assignedSubgroups: [{
+        course: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Course'
+        },
+        subgroups: [{
+            name: String,
+            code: String // Unique code for student enrollment
+        }]
+    }],
+    enrolledSubgroups: [{
+        course: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Course'
+        },
+        subgroup: {
+            type: String
+        },
+        instructor: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User'
+        }
+    }]
 });
 
 // Encrypt password before saving
