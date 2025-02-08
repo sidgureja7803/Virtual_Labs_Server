@@ -12,22 +12,50 @@ const experimentSchema = new mongoose.Schema({
     },
     course: {
         type: mongoose.Schema.ObjectId,
-        ref: 'Course',
+        ref: 'courseSchema',
         required: true
     },
     procedure: [{
         type: String,
         required: true
     }],
-    matlabLink: {
-        type: String,
-        required: [true, 'Please provide MATLAB simulation link']
-    },
-    createdBy: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: true
-    },
+    // matlabLink: {
+    //     type: String,
+    //     required: [true, 'Please provide MATLAB simulation link']
+    // },
+    // createdBy: {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: 'User',
+    //     required: true
+    // },
+    preTest: [{
+        question: {
+            type: String,
+            required: true
+        },
+        options: [{
+            type: String,
+            required: true
+        }],
+        correctAnswer: {
+            type: String,
+            required: true
+        }
+    }],
+    postTest: [{
+        question: {
+            type: String,
+            required: true
+        },
+        options: [{
+            type: String,
+            required: true
+        }],
+        correctAnswer: {
+            type: String,
+            required: true
+        },
+    }],
     feedback: [{
         user: {
             type: mongoose.Schema.ObjectId,

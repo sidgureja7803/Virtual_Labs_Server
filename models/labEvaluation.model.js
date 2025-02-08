@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
-const attendanceSchema = new mongoose.Schema({
+
+// changes to be made
+const labEvaluationSchema = new mongoose.Schema({
     course: {
         type: mongoose.Schema.ObjectId,
         ref: 'Course',
@@ -15,19 +17,28 @@ const attendanceSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    title: {
+        type: String,
+        required: true
+    },
     date: {
         type: Date,
         required: true
     },
-    students: [{
+    totalMarks: {
+        type: Number,
+        required: true
+    },
+    submissions: [{
         student: {
             type: mongoose.Schema.ObjectId,
             ref: 'User'
         },
-        status: {
-            type: String,
-            enum: ['present', 'absent'],
-            required: true
+        marks: Number,
+        feedback: String,
+        submittedAt: {
+            type: Date,
+            default: Date.now
         }
     }],
     createdAt: {
@@ -36,4 +47,4 @@ const attendanceSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Attendance', attendanceSchema); 
+module.exports = mongoose.model('LabEvaluation', labEvaluationSchema); 
